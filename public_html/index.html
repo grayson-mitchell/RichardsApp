@@ -1,0 +1,28 @@
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="newcss.css">
+    </head>
+
+    <body>
+
+    <h1>Traveler Hex Grid</h1>
+    <p>Mouse position (Pixel): <strong data-bind="text: pixel"></strong></p>
+    <p>Mouse position (Hex): <strong data-bind="text: hex"></strong></p>
+
+    <input data-bind="value:hexSize" />
+    <button type="Button" onclick=drawgrid();>Recreate Grid</button>
+
+    <br>
+
+    <canvas data-bind="event: { mousemove: UpdateMousePos }" 
+            id="myCanvas" style="background: black; margin:0px;" width="600" height="600"></canvas>
+
+    <script type="text/javascript" src="js/libs/knockout-2.2.1/knockout-min.js"></script>
+    <script SRC="newjavascript.js"></script>
+
+</html>
