@@ -1,0 +1,30 @@
+/* 
+    Document   : newcss
+    Created on : Aug 24, 2013, 10:34:16 AM
+    Author     : graysonmitchell
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+
+    h1 {
+    font: Ariel;
+    font-size: 18pt;
+    color: red
+}
+
+body {
+    margin: 0px;
+    padding: 0px;
+    background: black;
+}
+
+p {
+    color: red
+}
+
+
+
+    
+    
+
