@@ -32,32 +32,34 @@ ko.applyBindings(gridViewModel );
 
 //Gobeldegook code to bind the canvas MVVM style
 //http://gistflow.com/posts/382-knockout-js-canvas-and-context-3-knockout-hints
-ko.bindingHandlers.context = {
-  init:function(element, valueAccessor, allBindingsAccessor, viewModel){
-    viewModel.__context__ = element.getContext("2d");
-  },
-  update:function(element, valueAccessor, allBindingsAccessor, viewModel){
-  var callback = ko.utils.unwrapObservable(allBindingsAccessor().contextCallback);
-  callback.call(viewModel, viewModel.__context__);
-  }
-};
+//ko.bindingHandlers.context = {
+//  init:function(element, valueAccessor, allBindingsAccessor, viewModel){
+//    viewModel.__context__ = element.getContext("2d");
+//  },
+//  update:function(element, valueAccessor, allBindingsAccessor, viewModel){
+//  var callback = ko.utils.unwrapObservable(allBindingsAccessor().contextCallback);
+//  callback.call(viewModel, viewModel.__context__);
+//  }
+//};
 
 function UpdateMousePos(data, event) {
-    var mousePos = getMousePos(canvas, event);
+    var mousePos = getMousePos(hexCanvas, event);
     var gridPos = getHex([mousePos.x, mousePos.y]);
     gridViewModel.hex(Math.round(gridPos[0]) + "," + Math.round(gridPos[1]));
     gridViewModel.pixel(mousePos.x + "," + mousePos.y); // not sure why mousePos.y isn't a whole number
     DrawGrid();
 
     drawSpot(mousePos.x, mousePos.y, 8, "blue");    
-}
-
-function RedrawCanvas(context) {
-    context.save();
-    context.width = window.innerWidth;
-    gridViewModel.canvasHeight(window.innerHeight);
-    gridViewModel.canvasWidth(window.innerWidth);
-    context.restore();
+    
+    optionsContext.rect(0,0, optionsCanvas.width,optionsCanvas.height)
+    optionsContext.fillStyle="grey";
+    optionsContext.fill();
+    
+    optionsContext.fillStyle="black";
+    optionsContext.font="18px Arial";
+    optionsContext.fillText("Traveller Hex Grid",10,20);
+    optionsContext.font="14px Arial";
+    optionsContext.fillText("hex location: " + gridViewModel.hex(),10,40);
 }
 
 
@@ -68,13 +70,16 @@ function RedrawCanvas(context) {
 //    gridViewModel.canvasWidth($window.height)
 //})
 
-var canvas = document.getElementById('myCanvas');
-var context = canvas.getContext('2d');
+var hexCanvas = document.getElementById('hexCanvas');
+var hexContext = hexCanvas.getContext('2d');
+
+var optionsCanvas = document.getElementById('optionsCanvas');
+var optionsContext = optionsCanvas.getContext('2d');
 
 DrawGrid();
 
-function getMousePos(canvas, evt) {
-    var rect = canvas.getBoundingClientRect();
+function getMousePos(hexCanvas, evt) {
+    var rect = hexCanvas.getBoundingClientRect();
     return {
         x: evt.clientX - rect.left,
         y: evt.clientY - Math.floor(rect.top)
@@ -100,11 +105,11 @@ function axialCords() {
 }
 
 function drawSpot(center_x, center_y, radius, color) {
-    context.beginPath();
-    context.arc(center_x, center_y, radius, 0, 2 * Math.PI);
-    context.fillStyle = color;
-    context.fill();
-    context.stroke();
+    hexContext.beginPath();
+    hexContext.arc(center_x, center_y, radius, 0, 2 * Math.PI);
+    hexContext.fillStyle = color;
+    hexContext.fill();
+    hexContext.stroke();
 }
 
 function drawHalo(center_x, center_y, radius) {
@@ -114,21 +119,21 @@ function drawHalo(center_x, center_y, radius) {
 
 // draw hex
 function drawHex(center_x, center_y, size) {
-    context.moveTo(center_x, center_y);
-    context.beginPath();
+    hexContext.moveTo(center_x, center_y);
+    hexContext.beginPath();
     for (var i = 0; i <= 6; i++) {
         angle = 2 * Math.PI / 6 * i;
         x_i = center_x + size * Math.cos(angle);
         y_i = center_y + size * Math.sin(angle);
         if (i === 0) {
-            context.moveTo(x_i, y_i);
+            hexContext.moveTo(x_i, y_i);
        } else {
-            context.lineTo(x_i, y_i);
+            hexContext.lineTo(x_i, y_i);
         }
     }
-    context.strokeStyle = "white";
-    context.lineWidth = 0.3;
-    context.stroke();
+    hexContext.strokeStyle = "white";
+    hexContext.lineWidth = 0.3;
+    hexContext.stroke();
 }
 
 function getHex(point) {
@@ -145,7 +150,7 @@ function getHex(point) {
 
 function DrawGrid() {
     //console.log("function=drawgrid");
-    context.clearRect(0, 0, canvas.width, canvas.height);
+    hexContext.clearRect(0, 0, hexCanvas.width, hexCanvas.height);
 
     function offset2Cube(cords) {
         var x = cords[0]; // q
@@ -178,9 +183,9 @@ function DrawGrid() {
             cw = c[0] + "," + c[1] + "," + c[2];
         }
 
-        context.fillStyle = "white";
-        context.textAlign = "center";
-        context.fillText(cw, center_x, center_y);
+        hexContext.fillStyle = "white";
+        hexContext.textAlign = "center";
+        hexContext.fillText(cw, center_x, center_y);
     }
 
 
@@ -211,12 +216,14 @@ window.addEventListener('resize',function(){
 });
 
 function ResizeDraw() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-    //canvas.translate(canvas.width/2, canvas.height/2);
+    hexCanvas.width  = window.innerWidth;
+    hexCanvas.height = window.innerHeight;
+    
+    optionsCanvas.left = hexCanvas.width - optionsCanvas.width - 10;
+    
   
-    gridViewModel.canvasWidth(canvas.width);
-    gridViewModel.canvasHeight(canvas.height);    
+    gridViewModel.canvasWidth(hexCanvas.width);
+    gridViewModel.canvasHeight(hexCanvas.height);    
   
     DrawGrid();    
 }
