@@ -1,0 +1,37 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+  	<meta http-equiv="Content-type" content="text/html; charset=utf-8">
+  	<link rel="stylesheet" href="style.css" type="text/css" media="screen" title="no title" charset="utf-8">	 
+        <script src="js/libs/jquery-2.0.3.min.js"></script>
+        <script src="js/HexFunctions.js"></script>
+	<script src="js/hexgrid.js"></script>	
+        
+  </head>
+  
+  <body>
+	<div id="toast">
+            <div class="attributes">
+		<p id= "location">Location:</p>
+		<p id= "sub_sector">Sub Sector: Blank</p>
+		<p id= "system_name">System Name: None</p>		
+		<p id= "world_code">World Codes: None</p>
+		<p id= "sytstem_notes">System Notes: None</p>
+            </div>
+                <div id="buttons">
+                    <button id='Offset' type="Button" > Offset</button>
+                    <button id='Cube' type="Button"  > Cube</button>
+                    <button id ='Axial' type="Button" > Axial</button>
+                </div>
+	</div>
+		
+	<canvas id="hexCanvas"></canvas>
+        <canvas id="selectCanvas"></canvas>
+	
+	<div id="debug" style="width:200;float:left">
+		<p id="mouse_position">Mouse position (Pixel): </p>
+		<p id="hex_position_offset">Mouse position (Offset): </p>
+		<p id="hex_position_cube">Mouse position (Cube): </p>		
+	</div>
+  </body>
+</html>
